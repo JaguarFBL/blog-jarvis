@@ -97,30 +97,60 @@ async function chercherPlusieursImages(motsCles) {
 }
 
 // ============================================
-// GÉNÉRATION DE L'ARTICLE PRINCIPAL DU JOUR
+// DÉFINITION DES CATÉGORIES À GÉNÉRER CHAQUE JOUR
+// Chaque catégorie a son propre angle/ton pour que l'IA ne fasse pas
+// 4 fois le même article avec juste un mot différent
 // ============================================
-async function genererArticleDuJour() {
+const CATEGORIES = [
+    {
+        nom: 'France',
+        consigne: 'Concentre-toi uniquement sur l\'actualité française : politique, société, économie, faits marquants dans le pays.',
+        motCleImageDefaut: 'france news'
+    },
+    {
+        nom: 'Monde',
+        consigne: 'Concentre-toi uniquement sur l\'actualité internationale (hors France) : relations internationales, événements marquants à l\'étranger.',
+        motCleImageDefaut: 'world news'
+    },
+    {
+        nom: 'Tech',
+        consigne: 'Concentre-toi sur l\'actualité technologique et scientifique : intelligence artificielle, innovations, entreprises tech, découvertes scientifiques.',
+        motCleImageDefaut: 'technology innovation'
+    },
+    {
+        nom: 'Bonne nouvelle',
+        consigne: 'Choisis une nouvelle positive et inspirante (avancée sociale, environnementale, médicale, acte de solidarité, réussite collective). Garde un ton chaleureux et optimiste, tout en restant factuel.',
+        motCleImageDefaut: 'good news positive'
+    }
+];
+
+// ============================================
+// GÉNÉRATION D'UN ARTICLE POUR UNE CATÉGORIE DONNÉE
+// ============================================
+async function genererArticlePourCategorie(categorie) {
     const dateAujourdhui = new Date().toLocaleDateString('fr-FR', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     });
 
-    const prompt = `Tu es journaliste. Rédige un article de blog résumant l'actualité importante en France et dans le monde pour aujourd'hui (${dateAujourdhui}).
+    const prompt = `Tu es journaliste. Rédige un article de blog pour la catégorie "${categorie.nom}" daté d'aujourd'hui (${dateAujourdhui}).
+
+${categorie.consigne}
 
 Consignes :
-- Reste factuel et neutre, sans opinion personnelle
-- Structure l'article en 3 PARTIES bien distinctes séparées par un saut de ligne double : une introduction, un développement sur la France, un développement sur l'international
-- Longueur totale : environ 450-650 mots, réparti à peu près également entre les 3 parties
+- Reste factuel, sans opinion personnelle non justifiée
+- Structure l'article en 3 PARTIES bien distinctes séparées par un saut de ligne double : introduction, développement, conclusion ou ouverture
+- Longueur totale : environ 350-500 mots, réparti à peu près également entre les 3 parties
 - N'invente pas de faits précis (chiffres, citations) que tu ne connais pas avec certitude
 - IMPORTANT : écris en texte brut uniquement, SANS Markdown — pas d'astérisques, pas de #, pas de tirets de liste, pas de mise en forme
 
 Format de réponse EXACT (respecte bien ces lignes, chaque IMAGE sur sa propre ligne) :
 TITRE: [le titre, court et accrocheur]
-IMAGE1: [1 à 2 mots-clés en anglais pour illustrer l'introduction/le sujet général, ex: "paris skyline"]
-IMAGE2: [1 à 2 mots-clés en anglais pour illustrer la partie France, ex: "french parliament"]
-IMAGE3: [1 à 2 mots-clés en anglais pour illustrer la partie internationale, ex: "united nations"]
+IMAGE1: [1 à 2 mots-clés en anglais pour illustrer l'introduction]
+IMAGE2: [1 à 2 mots-clés en anglais pour illustrer le développement]
+IMAGE3: [1 à 2 mots-clés en anglais pour illustrer la conclusion]
 PARTIE1: [l'introduction]
-PARTIE2: [le développement France]
-PARTIE3: [le développement international]`;
+PARTIE2: [le développement]
+PARTIE3: [la conclusion ou ouverture]`;
 
     const reponseIA = await genererTexteAvecIA(prompt);
 
@@ -132,21 +162,20 @@ PARTIE3: [le développement international]`;
     const partie2Match = reponseIA.match(/PARTIE2:\s*([\s\S]*?)(?=PARTIE3:|$)/);
     const partie3Match = reponseIA.match(/PARTIE3:\s*([\s\S]+)/);
 
-    const titre = nettoyerMarkdown(titreMatch ? titreMatch[1].trim() : `Actualités du ${dateAujourdhui}`);
+    const titre = nettoyerMarkdown(titreMatch ? titreMatch[1].trim() : `${categorie.nom} — ${dateAujourdhui}`);
     const partie1 = nettoyerMarkdown(partie1Match ? partie1Match[1].trim() : '');
     const partie2 = nettoyerMarkdown(partie2Match ? partie2Match[1].trim() : '');
     const partie3 = nettoyerMarkdown(partie3Match ? partie3Match[1].trim() : reponseIA);
 
     const motsClesImages = [
-        image1Match ? image1Match[1].trim() : 'news',
-        image2Match ? image2Match[1].trim() : 'france',
-        image3Match ? image3Match[1].trim() : 'world'
+        image1Match ? image1Match[1].trim() : categorie.motCleImageDefaut,
+        image2Match ? image2Match[1].trim() : categorie.motCleImageDefaut,
+        image3Match ? image3Match[1].trim() : categorie.motCleImageDefaut
     ];
 
-    // Stocke les 3 parties séparément pour pouvoir intercaler les images entre elles à l'affichage
     const contenu = JSON.stringify([partie1, partie2, partie3]);
     const resume = partie1.substring(0, 200).trim() + '...';
-    const slug = creerSlug(titre) + '-' + Date.now();
+    const slug = creerSlug(categorie.nom + '-' + titre) + '-' + Date.now();
 
     const images = await chercherPlusieursImages(motsClesImages);
 
@@ -154,10 +183,31 @@ PARTIE3: [le développement international]`;
         `INSERT INTO articles
             (titre, slug, contenu, resume, categorie, genere_par_ia, images)
          VALUES (?, ?, ?, ?, ?, TRUE, ?)`,
-        [titre, slug, contenu, resume, 'France & Monde', JSON.stringify(images)]
+        [titre, slug, contenu, resume, categorie.nom, JSON.stringify(images)]
     );
 
-    return { titre, slug };
+    return { titre, slug, categorie: categorie.nom };
+}
+
+// ============================================
+// GÉNÉRATION DE TOUS LES ARTICLES DU JOUR (une catégorie après l'autre)
+// Si une catégorie échoue, les autres continuent quand même
+// ============================================
+async function genererArticlesDuJour() {
+    const resultats = [];
+    const erreurs = [];
+
+    for (const categorie of CATEGORIES) {
+        try {
+            const resultat = await genererArticlePourCategorie(categorie);
+            resultats.push(resultat);
+        } catch (err) {
+            console.error(`Erreur génération catégorie ${categorie.nom}:`, err.message);
+            erreurs.push({ categorie: categorie.nom, message: err.message });
+        }
+    }
+
+    return { resultats, erreurs };
 }
 
 // ============================================
