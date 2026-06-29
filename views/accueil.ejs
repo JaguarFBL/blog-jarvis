@@ -4,28 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Le Fil — Actualité France & Monde</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <div class="ticker">
-        <div class="conteneur" style="padding:0 24px;">
-            <span class="ticker-contenu">FLUX ACTIF — GÉNÉRATION QUOTIDIENNE AUTOMATISÉE — <%= articles.length %> ARTICLE<%= articles.length !== 1 ? 'S' : '' %> EN LIGNE<span class="ticker-curseur"></span></span>
-        </div>
-    </div>
-
     <div class="conteneur">
+        <div class="bandeau-haut">
+            <span><%= new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) %></span>
+            <% if (meteo) { %>
+                <div class="bandeau-meteo">
+                    <span>Paris</span>
+                    <strong><%= meteo.temperature %>°C</strong>
+                    <span><%= meteo.description %></span>
+                </div>
+            <% } %>
+        </div>
+
         <header class="entete">
+            <a href="/" class="logo-blog">Le Fil</a>
             <div class="entete-ligne">
-                <a href="/" class="logo-blog">Le<span>Fil</span></a>
+                <p class="sous-titre">L'actualité résumée chaque jour</p>
                 <div class="fil-statut">
                     <span class="point-actif"></span>
-                    Mise à jour quotidienne
+                    Rédigé par IA
                 </div>
             </div>
-            <p class="sous-titre">Un résumé de l'actualité, rédigé chaque jour par une IA.</p>
         </header>
+
+        <% if (chiffreDuJour) { %>
+            <div class="encart-chiffre">
+                <p class="eyebrow">Le chiffre du jour</p>
+                <p class="chiffre"><%= chiffreDuJour.chiffre %></p>
+                <p class="legende"><%= chiffreDuJour.legende %></p>
+            </div>
+        <% } %>
+
+        <% if (brefs && brefs.length > 0) { %>
+            <div class="section-brefs">
+                <p class="eyebrow">En bref</p>
+                <ul class="liste-brefs">
+                    <% brefs.forEach(b => { %>
+                        <li><%= b.contenu %></li>
+                    <% }) %>
+                </ul>
+            </div>
+        <% } %>
 
         <main class="liste-articles">
             <% if (articles.length === 0) { %>
@@ -35,6 +57,9 @@
             <% } else { %>
                 <% articles.forEach(article => { %>
                     <a href="/article/<%= article.slug %>" class="carte-article">
+                        <% if (article.imageVignette) { %>
+                            <img src="<%= article.imageVignette %>" alt="" class="carte-image">
+                        <% } %>
                         <div class="carte-meta">
                             <span><%= article.categorie %></span>
                             <time><%= new Date(article.date_publication).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) %></time>

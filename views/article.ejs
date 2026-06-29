@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= article.titre %> — Le Fil</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -13,6 +11,13 @@
         <a href="/" class="fil-retour">← Retour aux articles</a>
 
         <article>
+            <% if (images.length > 0) { %>
+                <img src="<%= images[0].url %>" alt="" class="article-image">
+                <p class="article-image-legende">
+                    Photo : <a href="<%= images[0].photographeUrl %>" target="_blank" rel="noopener"><%= images[0].photographe %></a> / Unsplash
+                </p>
+            <% } %>
+
             <div class="article-entete">
                 <h1 class="article-titre"><%= article.titre %></h1>
                 <div class="article-meta">
@@ -25,7 +30,18 @@
                 </div>
             </div>
 
-            <div class="article-corps"><%= article.contenu %></div>
+            <% parties.forEach((partie, index) => { %>
+                <div class="article-corps"><%= partie %></div>
+
+                <% if (images[index + 1]) { %>
+                    <div class="image-intercalee">
+                        <img src="<%= images[index + 1].url %>" alt="">
+                        <p class="legende-photo">
+                            Photo : <a href="<%= images[index + 1].photographeUrl %>" target="_blank" rel="noopener"><%= images[index + 1].photographe %></a> / Unsplash
+                        </p>
+                    </div>
+                <% } %>
+            <% }) %>
         </article>
 
         <section class="section-commentaires" id="commentaires">

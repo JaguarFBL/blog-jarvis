@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require('../db/connection');
 const { exigerConnexion } = require('../middleware/auth');
 const { creerSlug } = require('./blog');
+const { chercherImage } = require('../scripts/generer-article');
 
 // Page de connexion
 router.get('/connexion', (req, res) => {
@@ -46,7 +47,7 @@ router.get('/nouvel-article', exigerConnexion, (req, res) => {
 // Traitement de la publication
 router.post('/nouvel-article', exigerConnexion, async (req, res) => {
     try {
-        const { titre, contenu, categorie } = req.body;
+        const { titre, contenu, categorie, mot_cle_image } = req.body;
 
         if (!titre || !contenu || titre.trim().length === 0 || contenu.trim().length === 0) {
             return res.render('admin-nouvel-article', {
@@ -58,9 +59,20 @@ router.post('/nouvel-article', exigerConnexion, async (req, res) => {
         const resume = contenu.trim().substring(0, 200) + (contenu.length > 200 ? '...' : '');
         const slug = creerSlug(titre) + '-' + Date.now();
 
+        const image = mot_cle_image && mot_cle_image.trim()
+            ? await chercherImage(mot_cle_image.trim())
+            : null;
+
         await db.query(
-            'INSERT INTO articles (titre, slug, contenu, resume, categorie, genere_par_ia) VALUES (?, ?, ?, ?, ?, FALSE)',
-            [titre.trim(), slug, contenu.trim(), resume, categorie || 'France & Monde']
+            `INSERT INTO articles
+                (titre, slug, contenu, resume, categorie, genere_par_ia, image_url, image_photographe, image_photographe_url)
+             VALUES (?, ?, ?, ?, ?, FALSE, ?, ?, ?)`,
+            [
+                titre.trim(), slug, contenu.trim(), resume, categorie || 'France & Monde',
+                image ? image.url : null,
+                image ? image.photographe : null,
+                image ? image.photographeUrl : null
+            ]
         );
 
         res.render('admin-nouvel-article', {

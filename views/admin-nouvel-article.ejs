@@ -4,19 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nouvel article — Le Fil</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/admin.css">
 </head>
 <body>
     <div class="conteneur">
         <header class="entete">
+            <a href="/" class="logo-blog">Le Fil</a>
             <div class="entete-ligne">
-                <a href="/" class="logo-blog">Le Fil</a>
+                <p class="sous-titre">Écrire un nouvel article</p>
                 <a href="/admin/deconnexion" class="lien-deconnexion">Se déconnecter</a>
             </div>
-            <p class="sous-titre">Écrire un nouvel article</p>
         </header>
 
         <main style="padding: 32px 0 64px;">
@@ -37,6 +35,9 @@
 
                 <label for="categorie">Catégorie</label>
                 <input type="text" id="categorie" name="categorie" placeholder="France & Monde" maxlength="50">
+
+                <label for="mot_cle_image">Image (mot-clé de recherche, en anglais, optionnel)</label>
+                <input type="text" id="mot_cle_image" name="mot_cle_image" placeholder="ex: paris skyline" maxlength="100">
 
                 <label for="contenu">Contenu</label>
                 <textarea id="contenu" name="contenu" placeholder="Écris ton article ici..." required rows="16"></textarea>

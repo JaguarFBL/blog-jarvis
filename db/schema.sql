@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS articles (
     resume VARCHAR(500),
     categorie VARCHAR(50) DEFAULT 'France',
     genere_par_ia BOOLEAN DEFAULT TRUE,
+    images JSONB,
     date_publication TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -33,3 +34,29 @@ CREATE TABLE IF NOT EXISTS log_generation (
     succes BOOLEAN,
     message TEXT
 );
+
+-- Table pour les mini-actus "brefs" (en plus de l'article principal du jour)
+CREATE TABLE IF NOT EXISTS brefs (
+    id SERIAL PRIMARY KEY,
+    contenu VARCHAR(300) NOT NULL,
+    date_publication TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_brefs_date ON brefs (date_publication);
+
+-- Table pour le chiffre du jour
+CREATE TABLE IF NOT EXISTS chiffre_du_jour (
+    id SERIAL PRIMARY KEY,
+    chiffre VARCHAR(50) NOT NULL,
+    legende VARCHAR(300) NOT NULL,
+    date_publication TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_chiffre_date ON chiffre_du_jour (date_publication);
+
+-- Si tu as déjà créé la table articles avant cette mise à jour, exécute ceci
+-- pour migrer sans perdre tes articles existants :
+-- ALTER TABLE articles DROP COLUMN IF EXISTS image_url;
+-- ALTER TABLE articles DROP COLUMN IF EXISTS image_photographe;
+-- ALTER TABLE articles DROP COLUMN IF EXISTS image_photographe_url;
+-- ALTER TABLE articles ADD COLUMN IF NOT EXISTS images JSONB;

@@ -51,6 +51,7 @@ git push -u origin main
 5. Dans "Environment Variables", ajoute :
    - `DATABASE_URL` → la chaîne de connexion copiée depuis Neon à l'étape 1
    - `AI_API_KEY` → ta clé API (à ajouter quand tu l'auras)
+   - `UNSPLASH_ACCESS_KEY` → ta clé Unsplash, pour les photos d'illustration (voir section dédiée plus bas)
    - `CRON_SECRET_KEY` → invente une chaîne aléatoire longue (ex: générée sur uuidgenerator.net), garde-la de côté
    - `ADMIN_PASSWORD` → le mot de passe que tu veux utiliser pour publier tes propres articles
    - `SESSION_SECRET` → une autre chaîne aléatoire longue, différente de CRON_SECRET_KEY
@@ -88,6 +89,25 @@ Tu dois voir une réponse JSON avec `succes: true` et le titre généré.
 - Le service "dort" après 15 min sans visite : la première visite après une pause prend 30-60 secondes à charger, ensuite c'est rapide
 - 750h gratuites par mois (largement suffisant pour un seul site qui tourne H24, ça correspond à un mois complet)
 - Pas de carte bancaire requise pour ce plan
+
+## Nouveautés : météo, chiffre du jour, brefs, images multiples
+
+- **Météo** : récupérée automatiquement via Open-Meteo (gratuit, sans clé API) — rien à configurer
+- **Chiffre du jour** et **Brefs** (mini-actus) : générés automatiquement par l'IA en même temps que l'article principal, à chaque appel de `/api/generate-article`
+- **Images multiples** : l'IA propose 3 mots-clés (un par partie de l'article), et le serveur récupère jusqu'à 3 photos Unsplash différentes, intercalées dans le texte
+
+Si tu avais déjà créé la base de données avant cette mise à jour, va dans l'éditeur SQL de Neon et exécute les lignes `ALTER TABLE` en commentaire en bas de `db/schema.sql`, puis exécute aussi les nouvelles tables `brefs` et `chiffre_du_jour`.
+
+## Activer les photos d'illustration (Unsplash)
+
+Chaque article (généré par IA ou écrit par toi) peut avoir une photo libre de droit en illustration :
+
+1. Va sur **unsplash.com/developers**, crée un compte gratuit
+2. Clique "New Application", accepte les conditions, donne un nom à ton appli (ex: "Le Fil")
+3. Une fois créée, tu trouveras une **"Access Key"** sur le tableau de bord de l'appli — copie-la
+4. Ajoute-la dans Render comme variable d'environnement `UNSPLASH_ACCESS_KEY`
+
+Sans cette clé, le blog fonctionne quand même normalement, juste sans photo. Limite gratuite : 50 recherches par heure, largement suffisant pour 1 article par jour.
 
 ## Publier tes propres articles
 

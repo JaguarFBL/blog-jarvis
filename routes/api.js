@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
-const { genererArticleDuJour } = require('../scripts/generer-article');
+const { genererArticleDuJour, genererBrefsDuJour, genererChiffreDuJour } = require('../scripts/generer-article');
 
 // Route publique : renvoie tous les articles en JSON
 // Utilisée par le portfolio (GitHub Pages) pour afficher les articles avec son propre design
@@ -10,7 +10,7 @@ router.get('/articles', async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     try {
         const [articles] = await db.query(
-            'SELECT id, titre, slug, contenu, resume, categorie, date_publication FROM articles ORDER BY date_publication DESC LIMIT 50'
+            'SELECT id, titre, slug, contenu, resume, categorie, date_publication, images FROM articles ORDER BY date_publication DESC LIMIT 50'
         );
         res.json({ articles });
     } catch (err) {
@@ -56,6 +56,11 @@ router.get('/generate-article', async (req, res) => {
 
     try {
         const resultat = await genererArticleDuJour();
+
+        // Les brefs et le chiffre du jour sont secondaires : si l'un échoue,
+        // on continue quand même (l'article principal reste l'essentiel)
+        try { await genererBrefsDuJour(); } catch (e) { console.error('Erreur brefs:', e); }
+        try { await genererChiffreDuJour(); } catch (e) { console.error('Erreur chiffre du jour:', e); }
 
         await db.query(
             'INSERT INTO log_generation (succes, message) VALUES (TRUE, ?)',
