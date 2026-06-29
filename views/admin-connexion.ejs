@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion — Le Fil</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div class="conteneur conteneur-etroit">
+        <div class="carte-connexion">
+            <h1 class="logo-blog" style="font-size: 28px;">Le Fil</h1>
+            <p class="sous-titre" style="margin-bottom: 24px;">Espace de publication</p>
+
+            <% if (erreur) { %>
+                <div class="message-erreur"><%= erreur %></div>
+            <% } %>
+
+            <form method="POST" action="/admin/connexion">
+                <input type="password" name="mot_de_passe" placeholder="Mot de passe" required autofocus>
+                <button type="submit">Se connecter</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

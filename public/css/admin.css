@@ -1,0 +1,112 @@
+/* ===== ZONE ADMIN ===== */
+
+.conteneur-etroit {
+    max-width: 420px;
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.carte-connexion {
+    width: 100%;
+    background: var(--blanc-carte);
+    border: 1px solid var(--bordure);
+    border-radius: 8px;
+    padding: 32px;
+    text-align: center;
+}
+
+.carte-connexion form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.lien-deconnexion {
+    font-size: 13px;
+    color: var(--gris-texte);
+    text-decoration: none;
+}
+
+.lien-deconnexion:hover {
+    color: var(--signal);
+}
+
+.message-erreur {
+    background: #FDEDEC;
+    border: 1px solid #E8A29A;
+    color: #A33A2E;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.message-succes {
+    background: #EAF3EA;
+    border: 1px solid #A8CCA8;
+    color: #2E5E32;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.message-succes a {
+    color: #2E5E32;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.formulaire-article {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.formulaire-article label {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--gris-texte);
+    margin-top: 12px;
+}
+
+.formulaire-article input,
+.formulaire-article textarea,
+.carte-connexion input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--bordure);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 15px;
+    background: var(--blanc-carte);
+    color: var(--encre);
+}
+
+.formulaire-article textarea {
+    resize: vertical;
+    font-family: Georgia, serif;
+    line-height: 1.6;
+}
+
+.formulaire-article button,
+.carte-connexion button {
+    margin-top: 20px;
+    background: var(--signal);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.formulaire-article button:hover,
+.carte-connexion button:hover {
+    background: #1d3f99;
+}

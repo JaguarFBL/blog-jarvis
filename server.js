@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const { configurerSession } = require('./middleware/auth');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,8 +17,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Session pour la zone privée de publication
+configurerSession(app);
+
 // Routes
 app.use('/api', require('./routes/api'));
+app.use('/admin', require('./routes/admin'));
 app.use('/', require('./routes/blog'));
 
 app.listen(PORT, () => {

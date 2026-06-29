@@ -52,6 +52,8 @@ git push -u origin main
    - `DATABASE_URL` → la chaîne de connexion copiée depuis Neon à l'étape 1
    - `AI_API_KEY` → ta clé API (à ajouter quand tu l'auras)
    - `CRON_SECRET_KEY` → invente une chaîne aléatoire longue (ex: générée sur uuidgenerator.net), garde-la de côté
+   - `ADMIN_PASSWORD` → le mot de passe que tu veux utiliser pour publier tes propres articles
+   - `SESSION_SECRET` → une autre chaîne aléatoire longue, différente de CRON_SECRET_KEY
 6. Clique **"Create Web Service"** — Render installe et démarre tout seul
 
 Ton site sera accessible à une adresse du type : `https://lefil.onrender.com`
@@ -86,6 +88,16 @@ Tu dois voir une réponse JSON avec `succes: true` et le titre généré.
 - Le service "dort" après 15 min sans visite : la première visite après une pause prend 30-60 secondes à charger, ensuite c'est rapide
 - 750h gratuites par mois (largement suffisant pour un seul site qui tourne H24, ça correspond à un mois complet)
 - Pas de carte bancaire requise pour ce plan
+
+## Publier tes propres articles
+
+En plus des articles générés automatiquement par l'IA, tu peux écrire et publier les tiens :
+
+```
+https://lefil.onrender.com/admin/connexion
+```
+
+Connecte-toi avec le mot de passe défini dans `ADMIN_PASSWORD`, puis écris ton article sur la page qui suit. Il apparaîtra immédiatement sur le blog, mélangé avec les articles IA (sans distinction visuelle particulière à part le badge "Rédigé par IA" qui n'apparaît que sur les articles générés automatiquement).
 
 ## Quand tu auras ta clé API
 

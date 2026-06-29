@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouvel article — Le Fil</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div class="conteneur">
+        <header class="entete">
+            <div class="entete-ligne">
+                <a href="/" class="logo-blog">Le Fil</a>
+                <a href="/admin/deconnexion" class="lien-deconnexion">Se déconnecter</a>
+            </div>
+            <p class="sous-titre">Écrire un nouvel article</p>
+        </header>
+
+        <main style="padding: 32px 0 64px;">
+            <% if (erreur) { %>
+                <div class="message-erreur"><%= erreur %></div>
+            <% } %>
+
+            <% if (succes) { %>
+                <div class="message-succes">
+                    Article publié : « <%= succes.titre %> » —
+                    <a href="/article/<%= succes.slug %>">Voir l'article</a>
+                </div>
+            <% } %>
+
+            <form method="POST" action="/admin/nouvel-article" class="formulaire-article">
+                <label for="titre">Titre</label>
+                <input type="text" id="titre" name="titre" placeholder="Titre de l'article" required maxlength="255">
+
+                <label for="categorie">Catégorie</label>
+                <input type="text" id="categorie" name="categorie" placeholder="France & Monde" maxlength="50">
+
+                <label for="contenu">Contenu</label>
+                <textarea id="contenu" name="contenu" placeholder="Écris ton article ici..." required rows="16"></textarea>
+
+                <button type="submit">Publier l'article</button>
+            </form>
+        </main>
+    </div>
+</body>
+</html>
