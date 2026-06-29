@@ -7,6 +7,17 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+    <div class="tiroir-poignee" aria-hidden="true"></div>
+    <div class="tiroir-fond" id="tiroir-fond"></div>
+    <nav class="tiroir-menu" id="tiroir-menu">
+        <div class="tiroir-entete">
+            <span class="tiroir-logo">Le Fil</span>
+        </div>
+        <a href="/" class="tiroir-lien">Accueil</a>
+        <a href="/admin/connexion" class="tiroir-lien">Publier un article</a>
+        <a href="/admin/connexion" class="tiroir-lien">Espace privé</a>
+    </nav>
+
     <div class="conteneur">
         <a href="/" class="fil-retour">← Retour aux articles</a>
 
@@ -68,5 +79,7 @@
             <% } %>
         </section>
     </div>
+
+    <script src="/js/tiroir.js"></script>
 </body>
 </html>

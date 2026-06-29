@@ -7,6 +7,17 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+    <div class="tiroir-poignee" aria-hidden="true"></div>
+    <div class="tiroir-fond" id="tiroir-fond"></div>
+    <nav class="tiroir-menu" id="tiroir-menu">
+        <div class="tiroir-entete">
+            <span class="tiroir-logo">Le Fil</span>
+        </div>
+        <a href="/" class="tiroir-lien">Accueil</a>
+        <a href="/admin/connexion" class="tiroir-lien">Publier un article</a>
+        <a href="/admin/connexion" class="tiroir-lien">Espace privé</a>
+    </nav>
+
     <div class="conteneur">
         <div class="bandeau-haut">
             <span><%= new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) %></span>
@@ -41,11 +52,11 @@
         <% if (brefs && brefs.length > 0) { %>
             <div class="section-brefs">
                 <p class="eyebrow">En bref</p>
-                <ul class="liste-brefs">
+                <div class="brefs-scroll">
                     <% brefs.forEach(b => { %>
-                        <li><%= b.contenu %></li>
+                        <div class="bref-pastille"><%= b.contenu %></div>
                     <% }) %>
-                </ul>
+                </div>
             </div>
         <% } %>
 
@@ -55,18 +66,37 @@
                     <p>Aucun article pour l'instant. Le premier arrive bientôt.</p>
                 </div>
             <% } else { %>
-                <% articles.forEach(article => { %>
-                    <a href="/article/<%= article.slug %>" class="carte-article">
-                        <div class="carte-meta">
-                            <span><%= article.categorie %></span>
-                            <time><%= new Date(article.date_publication).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) %></time>
-                        </div>
-                        <h2 class="carte-titre"><%= article.titre %></h2>
-                        <p class="carte-resume"><%= article.resume %></p>
-                    </a>
+                <% articles.forEach((article, index) => { %>
+                    <% if (index === 0) { %>
+                        <a href="/article/<%= article.slug %>" class="carte-article carte-article--vedette">
+                            <% if (article.imageVignette) { %>
+                                <img src="<%= article.imageVignette %>" alt="" class="carte-image">
+                            <% } %>
+                            <div class="carte-meta">
+                                <span><%= article.categorie %></span>
+                                <time><%= new Date(article.date_publication).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' }) %></time>
+                            </div>
+                            <h2 class="carte-titre"><%= article.titre %></h2>
+                            <p class="carte-resume"><%= article.resume %></p>
+                        </a>
+                    <% } else { %>
+                        <a href="/article/<%= article.slug %>" class="carte-article carte-article--compacte">
+                            <% if (article.imageVignette) { %>
+                                <img src="<%= article.imageVignette %>" alt="" class="carte-image-petite">
+                            <% } %>
+                            <div class="carte-compacte-texte">
+                                <div class="carte-meta">
+                                    <span><%= article.categorie %></span>
+                                </div>
+                                <h2 class="carte-titre carte-titre--petit"><%= article.titre %></h2>
+                            </div>
+                        </a>
+                    <% } %>
                 <% }) %>
             <% } %>
         </main>
     </div>
+
+    <script src="/js/tiroir.js"></script>
 </body>
 </html>

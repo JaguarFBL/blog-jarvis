@@ -49,9 +49,25 @@ async function recupererMeteo() {
 // Page d'accueil : liste des derniers articles + météo + brefs + chiffre du jour
 router.get('/', async (req, res) => {
     try {
-        const [articles] = await db.query(
-            'SELECT id, titre, slug, resume, categorie, date_publication FROM articles ORDER BY date_publication DESC LIMIT 20'
-        );
+        let articles = [];
+        try {
+            const [result] = await db.query(
+                'SELECT id, titre, slug, resume, categorie, date_publication, images FROM articles ORDER BY date_publication DESC LIMIT 20'
+            );
+            articles = result;
+        } catch (e) {
+            // Si la colonne images n'existe pas encore, on retombe sur une requête sans elle
+            const [result] = await db.query(
+                'SELECT id, titre, slug, resume, categorie, date_publication FROM articles ORDER BY date_publication DESC LIMIT 20'
+            );
+            articles = result;
+        }
+
+        // La première image de chaque article sert de vignette
+        const articlesAvecVignette = articles.map(a => ({
+            ...a,
+            imageVignette: a.images && a.images.length > 0 ? a.images[0].url : null
+        }));
 
         let brefs = [], chiffreRows = [];
         try {
@@ -67,7 +83,7 @@ router.get('/', async (req, res) => {
         const meteo = await recupererMeteo();
         const chiffreDuJour = chiffreRows.length > 0 ? chiffreRows[0] : null;
 
-        res.render('accueil', { articles, brefs, chiffreDuJour, meteo });
+        res.render('accueil', { articles: articlesAvecVignette, brefs, chiffreDuJour, meteo });
     } catch (err) {
         console.error('Erreur chargement accueil:', err);
         res.status(500).send('Erreur serveur');
