@@ -256,7 +256,7 @@ LEGENDE: [la phrase d'explication]`;
 }
 
 module.exports = {
-    genererArticleDuJour,
+    genererArticlesDuJour,
     genererBrefsDuJour,
     genererChiffreDuJour,
     chercherImage

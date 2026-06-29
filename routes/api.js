@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
-const { genererArticleDuJour, genererBrefsDuJour, genererChiffreDuJour } = require('../scripts/generer-article');
+const { genererArticlesDuJour, genererBrefsDuJour, genererChiffreDuJour } = require('../scripts/generer-article');
 
 // Route publique : renvoie tous les articles en JSON
 // Utilisée par le portfolio (GitHub Pages) pour afficher les articles avec son propre design
@@ -55,19 +55,20 @@ router.get('/generate-article', async (req, res) => {
     }
 
     try {
-        const resultat = await genererArticleDuJour();
+        const resultat = await genererArticlesDuJour();
 
-        // Les brefs et le chiffre du jour sont secondaires : si l'un échoue,
-        // on continue quand même (l'article principal reste l'essentiel)
         try { await genererBrefsDuJour(); } catch (e) { console.error('Erreur brefs:', e); }
         try { await genererChiffreDuJour(); } catch (e) { console.error('Erreur chiffre du jour:', e); }
 
+        const nbSucces = resultat.resultats.length;
+        const nbErreurs = resultat.erreurs.length;
+
         await db.query(
             'INSERT INTO log_generation (succes, message) VALUES (TRUE, ?)',
-            [`Article généré : ${resultat.titre}`]
-        );
+            [`${nbSucces} article(s) généré(s)${nbErreurs > 0 ? `, ${nbErreurs} erreur(s)` : ''}`]
+        ).catch(() => {});
 
-        res.json({ succes: true, article: resultat });
+        res.json({ succes: true, articles: resultat.resultats, erreurs: resultat.erreurs });
     } catch (err) {
         console.error('Erreur génération article:', err);
 
