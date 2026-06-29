@@ -18,7 +18,7 @@
         <% if (liensUtiles && liensUtiles.length > 0) { %>
             <p class="tiroir-categorie">Liens utiles</p>
             <% liensUtiles.forEach(lien => { %>
-                <a href="<%= lien.url %>" class="tiroir-lien" target="_blank" rel="noopener"><%= lien.titre %></a>
+                <a href="<%= lien.url %>" class="tiroir-lien"><%= lien.titre %></a>
             <% }) %>
         <% } %>
     </nav>
