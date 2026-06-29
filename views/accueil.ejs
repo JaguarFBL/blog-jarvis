@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Fil — Actualité France & Monde</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="conteneur">
+        <header class="entete">
+            <div class="entete-ligne">
+                <a href="/" class="logo-blog">Le Fil</a>
+                <div class="fil-statut">
+                    <span class="point-actif"></span>
+                    Mise à jour quotidienne
+                </div>
+            </div>
+            <p class="sous-titre">Un résumé de l'actualité, rédigé chaque jour par une IA.</p>
+        </header>
+
+        <main class="liste-articles">
+            <% if (articles.length === 0) { %>
+                <div class="vide">
+                    <p>Aucun article pour l'instant. Le premier arrive bientôt.</p>
+                </div>
+            <% } else { %>
+                <% articles.forEach(article => { %>
+                    <a href="/article/<%= article.slug %>" class="carte-article">
+                        <div class="carte-meta">
+                            <span><%= article.categorie %></span>
+                            <time><%= new Date(article.date_publication).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) %></time>
+                        </div>
+                        <h2 class="carte-titre"><%= article.titre %></h2>
+                        <p class="carte-resume"><%= article.resume %></p>
+                    </a>
+                <% }) %>
+            <% } %>
+        </main>
+    </div>
+</body>
+</html>

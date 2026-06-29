@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= article.titre %> — Le Fil</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="conteneur">
+        <a href="/" class="fil-retour">← Retour aux articles</a>
+
+        <article>
+            <div class="article-entete">
+                <h1 class="article-titre"><%= article.titre %></h1>
+                <div class="article-meta">
+                    <span><%= article.categorie %></span>
+                    <span>·</span>
+                    <time><%= new Date(article.date_publication).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) %></time>
+                    <% if (article.genere_par_ia) { %>
+                        <span class="badge-ia">Rédigé par IA</span>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="article-corps"><%= article.contenu %></div>
+        </article>
+
+        <section class="section-commentaires" id="commentaires">
+            <h2><%= commentaires.length %> commentaire<%= commentaires.length !== 1 ? 's' : '' %></h2>
+
+            <form class="formulaire-commentaire" method="POST" action="/article/<%= article.slug %>/commentaire">
+                <input type="text" name="nom_auteur" placeholder="Votre nom" required maxlength="100">
+                <textarea name="contenu" placeholder="Votre commentaire..." required maxlength="2000"></textarea>
+                <button type="submit">Publier le commentaire</button>
+            </form>
+
+            <% if (commentaires.length === 0) { %>
+                <p class="aucun-commentaire">Aucun commentaire pour l'instant. Soyez le premier à réagir.</p>
+            <% } else { %>
+                <% commentaires.forEach(c => { %>
+                    <div class="commentaire">
+                        <div class="commentaire-auteur">
+                            <%= c.nom_auteur %>
+                            <span class="commentaire-date"><%= new Date(c.date_creation).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) %></span>
+                        </div>
+                        <div class="commentaire-contenu"><%= c.contenu %></div>
+                    </div>
+                <% }) %>
+            <% } %>
+        </section>
+    </div>
+</body>
+</html>

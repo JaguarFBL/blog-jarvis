@@ -1,0 +1,312 @@
+/* ===========================================
+   IDENTITÉ : un fil d'actualité généré par IA
+   Palette : papier bleuté, encre profonde, bleu signal
+   =========================================== */
+
+:root {
+    --papier: #EFEDE7;
+    --papier-fonce: #E4E1D8;
+    --encre: #1A1D29;
+    --encre-douce: #3A3D4A;
+    --signal: #2451B8;
+    --signal-clair: #5B7FD4;
+    --gris-texte: #6B6B6B;
+    --bordure: #D4D0C5;
+    --blanc-carte: #FAF9F5;
+}
+
+@font-face {
+    font-family: 'Fraunces';
+    src: local('Fraunces');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--papier);
+    color: var(--encre);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+.conteneur {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* ===== EN-TÊTE ===== */
+.entete {
+    border-bottom: 2px solid var(--encre);
+    padding: 32px 0 20px;
+    margin-bottom: 8px;
+}
+
+.entete-ligne {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+}
+
+.logo-blog {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    color: var(--encre);
+    text-decoration: none;
+}
+
+.fil-statut {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--gris-texte);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.point-actif {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--signal);
+    animation: pulser 2.4s ease-in-out infinite;
+}
+
+@keyframes pulser {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+}
+
+.sous-titre {
+    font-size: 13px;
+    color: var(--gris-texte);
+    font-style: italic;
+}
+
+/* ===== LISTE D'ARTICLES ===== */
+.liste-articles {
+    padding: 24px 0 64px;
+}
+
+.carte-article {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--bordure);
+    transition: padding-left 0.2s ease;
+}
+
+.carte-article:hover {
+    padding-left: 8px;
+}
+
+.carte-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--signal);
+    font-weight: 600;
+}
+
+.carte-meta time {
+    color: var(--gris-texte);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.carte-titre {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 8px;
+    color: var(--encre);
+}
+
+.carte-resume {
+    color: var(--encre-douce);
+    font-size: 15px;
+}
+
+.vide {
+    padding: 64px 24px;
+    text-align: center;
+    color: var(--gris-texte);
+}
+
+/* ===== PAGE ARTICLE ===== */
+.fil-retour {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--signal);
+    text-decoration: none;
+    margin: 24px 0;
+    font-weight: 600;
+}
+
+.fil-retour:hover {
+    text-decoration: underline;
+}
+
+.article-entete {
+    padding: 8px 0 32px;
+    border-bottom: 1px solid var(--bordure);
+    margin-bottom: 32px;
+}
+
+.article-titre {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    color: var(--encre);
+}
+
+.article-meta {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    font-size: 13px;
+    color: var(--gris-texte);
+}
+
+.badge-ia {
+    background: var(--encre);
+    color: var(--papier);
+    padding: 3px 10px;
+    border-radius: 3px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+}
+
+.article-corps {
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--encre-douce);
+    white-space: pre-line;
+    padding-bottom: 40px;
+}
+
+/* ===== COMMENTAIRES ===== */
+.section-commentaires {
+    border-top: 2px solid var(--encre);
+    padding: 32px 0 64px;
+}
+
+.section-commentaires h2 {
+    font-family: Georgia, serif;
+    font-size: 22px;
+    margin-bottom: 24px;
+}
+
+.formulaire-commentaire {
+    background: var(--blanc-carte);
+    border: 1px solid var(--bordure);
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 32px;
+}
+
+.formulaire-commentaire input,
+.formulaire-commentaire textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--bordure);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    margin-bottom: 12px;
+    background: var(--papier);
+    color: var(--encre);
+}
+
+.formulaire-commentaire textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.formulaire-commentaire button {
+    background: var(--signal);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.formulaire-commentaire button:hover {
+    background: #1d3f99;
+}
+
+.commentaire {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--bordure);
+}
+
+.commentaire-auteur {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.commentaire-date {
+    font-size: 12px;
+    color: var(--gris-texte);
+    font-weight: 400;
+    margin-left: 8px;
+}
+
+.commentaire-contenu {
+    font-size: 14px;
+    color: var(--encre-douce);
+}
+
+.aucun-commentaire {
+    color: var(--gris-texte);
+    font-size: 14px;
+    font-style: italic;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+    .logo-blog { font-size: 26px; }
+    .article-titre { font-size: 28px; }
+    .carte-titre { font-size: 21px; }
+    .conteneur { padding: 0 16px; }
+}
+
+/* ===== ACCESSIBILITÉ ===== */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .point-actif { animation: none; }
+}
