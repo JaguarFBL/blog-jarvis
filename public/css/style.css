@@ -35,7 +35,7 @@ body {
 
 /* ===== EN-TÊTE ===== */
 .entete {
-    padding: 36px 0 16px;
+    padding: 24px 0 12px;
     border-bottom: 3px double var(--encre);
     margin-bottom: 8px;
     text-align: center;
@@ -44,7 +44,7 @@ body {
 .logo-blog {
     font-family: Georgia, serif;
     font-weight: 700;
-    font-size: 46px;
+    font-size: 36px;
     letter-spacing: -0.01em;
     color: var(--encre);
     text-decoration: none;
@@ -88,14 +88,14 @@ body {
 
 /* ===== LISTE D'ARTICLES ===== */
 .liste-articles {
-    padding: 20px 0 64px;
+    padding: 12px 0 48px;
 }
 
 .carte-article {
     display: block;
     text-decoration: none;
     color: inherit;
-    padding: 22px 0;
+    padding: 14px 0;
     border-bottom: 1px solid var(--bordure);
 }
 
@@ -134,16 +134,17 @@ body {
 
 .carte-titre {
     font-family: Georgia, serif;
-    font-size: 27px;
+    font-size: 22px;
     font-weight: 700;
     line-height: 1.25;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     color: var(--encre);
 }
 
 .carte-resume {
     color: var(--encre-douce);
-    font-size: 15px;
+    font-size: 13px;
+    line-height: 1.4;
 }
 
 .vide {
@@ -354,49 +355,52 @@ body {
 
 /* ===== CHIFFRE DU JOUR ===== */
 .encart-chiffre {
-    border: 1px solid var(--encre);
-    padding: 20px 24px;
-    margin: 20px 0 28px;
-    text-align: center;
+    border: none;
+    padding: 8px 0 12px;
+    margin: 8px 0 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--bordure);
 }
 
 .encart-chiffre .chiffre {
     font-family: Georgia, serif;
     font-weight: 700;
-    font-size: 48px;
+    font-size: 22px;
     color: var(--accent);
-    line-height: 1;
-    margin-bottom: 6px;
+    line-height: 1.3;
+    display: inline;
+    margin-right: 6px;
 }
 
 .encart-chiffre .legende {
     font-size: 13px;
-    color: var(--gris-texte);
-    font-style: italic;
+    color: var(--encre-douce);
+    font-style: normal;
+    display: inline;
 }
 
 .encart-chiffre .eyebrow {
-    font-size: 10px;
+    font-size: 9px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--gris-texte);
-    margin-bottom: 10px;
+    margin-bottom: 4px;
 }
 
 /* ===== BREFS (mini-actus) ===== */
 .section-brefs {
     border-bottom: 1px solid var(--bordure);
-    padding: 4px 0 24px;
+    padding: 4px 0 16px;
     margin-bottom: 8px;
 }
 
 .section-brefs .eyebrow {
-    font-size: 11px;
+    font-size: 9px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--accent);
     font-weight: 700;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .liste-brefs {
@@ -404,11 +408,11 @@ body {
 }
 
 .liste-brefs li {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--encre-douce);
-    padding: 8px 0 8px 18px;
+    padding: 4px 0 4px 14px;
     border-left: 2px solid var(--bordure);
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
 /* ===== IMAGES INTERCALÉES DANS L'ARTICLE ===== */
