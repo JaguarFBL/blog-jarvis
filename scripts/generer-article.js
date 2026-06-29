@@ -5,9 +5,7 @@ const db = require('../db/connection');
 const { creerSlug } = require('../routes/blog');
 
 // ============================================
-// FONCTION D'APPEL À L'API IA
-// Remplace le contenu de cette fonction selon l'API que tu utilises
-// (OpenAI, Anthropic Claude, Mistral, etc.)
+// FONCTION D'APPEL À L'API IA — Mistral AI
 // ============================================
 async function genererTexteAvecIA(prompt) {
     const apiKey = process.env.AI_API_KEY;
@@ -16,15 +14,14 @@ async function genererTexteAvecIA(prompt) {
         throw new Error('Clé API manquante. Ajoute AI_API_KEY dans les variables d\'environnement.');
     }
 
-    // --- Exemple avec OpenAI (à adapter si tu utilises une autre API) ---
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
-            model: 'gpt-4o-mini',
+            model: 'mistral-small-latest',
             messages: [
                 { role: 'user', content: prompt }
             ],
