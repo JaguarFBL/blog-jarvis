@@ -4,6 +4,18 @@
 const db = require('../db/connection');
 const { creerSlug } = require('../routes/blog');
 
+// Nettoie le Markdown que l'IA pourrait avoir ajouté malgré la consigne
+// (gras **texte**, listes à puces *, titres #, etc.) pour ne garder que du texte brut
+function nettoyerMarkdown(texte) {
+    return texte
+        .replace(/\*\*(.+?)\*\*/g, '$1')   // **gras** -> gras
+        .replace(/\*(.+?)\*/g, '$1')        // *italique* -> italique
+        .replace(/^#{1,6}\s*/gm, '')        // # Titre -> Titre
+        .replace(/^[-*]\s+/gm, '— ')        // * item / - item -> — item
+        .replace(/`{1,3}([^`]+)`{1,3}/g, '$1') // `code` -> code
+        .trim();
+}
+
 // ============================================
 // FONCTION D'APPEL À L'API IA — Mistral AI
 // ============================================
@@ -53,6 +65,7 @@ Consignes :
 - Structure l'article avec une intro, puis les points clés (France, puis International)
 - Longueur : environ 400-600 mots
 - N'invente pas de faits précis (chiffres, citations) que tu ne connais pas avec certitude
+- IMPORTANT : écris en texte brut uniquement, SANS Markdown — pas d'astérisques, pas de #, pas de tirets de liste, pas de mise en forme. Du texte simple avec des paragraphes séparés par des retours à la ligne.
 - Termine par un titre court et accrocheur sur la première ligne, puis le contenu
 
 Format de réponse :
@@ -65,8 +78,8 @@ CONTENU: [le contenu de l'article]`;
     const titreMatch = reponseIA.match(/TITRE:\s*(.+)/);
     const contenuMatch = reponseIA.match(/CONTENU:\s*([\s\S]+)/);
 
-    const titre = titreMatch ? titreMatch[1].trim() : `Actualités du ${dateAujourdhui}`;
-    const contenu = contenuMatch ? contenuMatch[1].trim() : reponseIA;
+    const titre = nettoyerMarkdown(titreMatch ? titreMatch[1].trim() : `Actualités du ${dateAujourdhui}`);
+    const contenu = nettoyerMarkdown(contenuMatch ? contenuMatch[1].trim() : reponseIA);
     const resume = contenu.substring(0, 200).trim() + '...';
     const slug = creerSlug(titre) + '-' + Date.now();
 

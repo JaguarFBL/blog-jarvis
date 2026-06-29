@@ -5,14 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Le Fil — Actualité France & Monde</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+    <div class="ticker">
+        <div class="conteneur" style="padding:0 24px;">
+            <span class="ticker-contenu">FLUX ACTIF — GÉNÉRATION QUOTIDIENNE AUTOMATISÉE — <%= articles.length %> ARTICLE<%= articles.length !== 1 ? 'S' : '' %> EN LIGNE<span class="ticker-curseur"></span></span>
+        </div>
+    </div>
+
     <div class="conteneur">
         <header class="entete">
             <div class="entete-ligne">
-                <a href="/" class="logo-blog">Le Fil</a>
+                <a href="/" class="logo-blog">Le<span>Fil</span></a>
                 <div class="fil-statut">
                     <span class="point-actif"></span>
                     Mise à jour quotidienne
