@@ -57,9 +57,6 @@
             <% } else { %>
                 <% articles.forEach(article => { %>
                     <a href="/article/<%= article.slug %>" class="carte-article">
-                        <% if (article.imageVignette) { %>
-                            <img src="<%= article.imageVignette %>" alt="" class="carte-image">
-                        <% } %>
                         <div class="carte-meta">
                             <span><%= article.categorie %></span>
                             <time><%= new Date(article.date_publication).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) %></time>
