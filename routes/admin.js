@@ -63,15 +63,15 @@ router.post('/nouvel-article', exigerConnexion, async (req, res) => {
             ? await chercherImage(mot_cle_image.trim())
             : null;
 
+        const images = image ? JSON.stringify([image]) : '[]';
+
         await db.query(
             `INSERT INTO articles
-                (titre, slug, contenu, resume, categorie, genere_par_ia, image_url, image_photographe, image_photographe_url)
-             VALUES (?, ?, ?, ?, ?, FALSE, ?, ?, ?)`,
+                (titre, slug, contenu, resume, categorie, genere_par_ia, images)
+             VALUES (?, ?, ?, ?, ?, FALSE, ?)`,
             [
                 titre.trim(), slug, contenu.trim(), resume, categorie || 'France & Monde',
-                image ? image.url : null,
-                image ? image.photographe : null,
-                image ? image.photographeUrl : null
+                images
             ]
         );
 

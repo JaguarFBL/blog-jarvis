@@ -10,7 +10,7 @@ router.get('/articles', async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     try {
         const [articles] = await db.query(
-            'SELECT id, titre, slug, contenu, resume, categorie, date_publication, images FROM articles ORDER BY date_publication DESC LIMIT 50'
+            'SELECT id, titre, slug, contenu, resume, categorie, date_publication FROM articles ORDER BY date_publication DESC LIMIT 50'
         );
         res.json({ articles });
     } catch (err) {

@@ -50,27 +50,24 @@ async function recupererMeteo() {
 router.get('/', async (req, res) => {
     try {
         const [articles] = await db.query(
-            'SELECT id, titre, slug, resume, categorie, date_publication, images FROM articles ORDER BY date_publication DESC LIMIT 20'
+            'SELECT id, titre, slug, resume, categorie, date_publication FROM articles ORDER BY date_publication DESC LIMIT 20'
         );
 
-        const [brefs] = await db.query(
-            'SELECT contenu FROM brefs ORDER BY date_publication DESC LIMIT 4'
-        );
+        let brefs = [], chiffreRows = [];
+        try {
+            const [result] = await db.query('SELECT contenu FROM brefs ORDER BY date_publication DESC LIMIT 4');
+            brefs = result;
+        } catch (e) { /* table pas encore créée */ }
 
-        const [chiffreRows] = await db.query(
-            'SELECT chiffre, legende FROM chiffre_du_jour ORDER BY date_publication DESC LIMIT 1'
-        );
+        try {
+            const [result] = await db.query('SELECT chiffre, legende FROM chiffre_du_jour ORDER BY date_publication DESC LIMIT 1');
+            chiffreRows = result;
+        } catch (e) { /* table pas encore créée */ }
 
         const meteo = await recupererMeteo();
         const chiffreDuJour = chiffreRows.length > 0 ? chiffreRows[0] : null;
 
-        // La première image de chaque article sert de vignette sur la page d'accueil
-        const articlesAvecVignette = articles.map(a => ({
-            ...a,
-            imageVignette: a.images && a.images.length > 0 ? a.images[0].url : null
-        }));
-
-        res.render('accueil', { articles: articlesAvecVignette, brefs, chiffreDuJour, meteo });
+        res.render('accueil', { articles, brefs, chiffreDuJour, meteo });
     } catch (err) {
         console.error('Erreur chargement accueil:', err);
         res.status(500).send('Erreur serveur');
@@ -101,7 +98,8 @@ router.get('/article/:slug', async (req, res) => {
             parties = [article.contenu];
         }
 
-        const images = article.images || [];
+        let images = [];
+        try { images = article.images || []; } catch { images = []; }
 
         const [commentaires] = await db.query(
             'SELECT * FROM commentaires WHERE article_id = ? AND approuve = TRUE ORDER BY date_creation DESC',
