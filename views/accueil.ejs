@@ -14,7 +14,13 @@
         </div>
         <a href="/" class="tiroir-lien">Accueil</a>
         <a href="/admin/connexion" class="tiroir-lien">Publier un article</a>
-        <a href="/admin/connexion" class="tiroir-lien">Espace privé</a>
+
+        <% if (liensUtiles && liensUtiles.length > 0) { %>
+            <p class="tiroir-categorie">Liens utiles</p>
+            <% liensUtiles.forEach(lien => { %>
+                <a href="<%= lien.url %>" class="tiroir-lien" target="_blank" rel="noopener"><%= lien.titre %></a>
+            <% }) %>
+        <% } %>
     </nav>
 
     <div class="conteneur">

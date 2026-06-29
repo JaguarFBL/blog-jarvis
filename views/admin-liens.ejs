@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liens utiles — Le Fil</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div class="tiroir-fond" id="tiroir-fond"></div>
+    <nav class="tiroir-menu" id="tiroir-menu">
+        <div class="tiroir-entete">
+            <span class="tiroir-logo">Le Fil</span>
+        </div>
+        <a href="/" class="tiroir-lien">Accueil</a>
+        <a href="/admin/nouvel-article" class="tiroir-lien">Publier un article</a>
+        <a href="/admin/deconnexion" class="tiroir-lien">Se déconnecter</a>
+    </nav>
+
+    <div class="conteneur">
+        <div class="bandeau-haut">
+            <button class="bouton-menu" id="bouton-menu" aria-label="Ouvrir le menu">
+                <span></span><span></span><span></span>
+            </button>
+            <a href="/admin/nouvel-article" class="fil-retour" style="margin: 0;">← Retour à la publication</a>
+        </div>
+
+        <header class="entete">
+            <a href="/" class="logo-blog">Le Fil</a>
+            <div class="entete-ligne">
+                <p class="sous-titre">Gérer les liens utiles</p>
+                <a href="/admin/deconnexion" class="lien-deconnexion">Se déconnecter</a>
+            </div>
+        </header>
+
+        <main style="padding: 32px 0 64px;">
+            <% if (erreur) { %>
+                <div class="message-erreur"><%= erreur %></div>
+            <% } %>
+
+            <form method="POST" action="/admin/liens" class="formulaire-article">
+                <label for="titre">Titre du lien</label>
+                <input type="text" id="titre" name="titre" placeholder="ex: Portfolio" required maxlength="100">
+
+                <label for="url">Adresse (URL)</label>
+                <input type="url" id="url" name="url" placeholder="https://exemple.com" required>
+
+                <button type="submit">Ajouter le lien</button>
+            </form>
+
+            <div style="margin-top: 32px;">
+                <% if (liens.length === 0) { %>
+                    <p class="aucun-commentaire">Aucun lien pour l'instant.</p>
+                <% } else { %>
+                    <% liens.forEach(lien => { %>
+                        <div class="ligne-lien">
+                            <div>
+                                <p class="ligne-lien-titre"><%= lien.titre %></p>
+                                <p class="ligne-lien-url"><%= lien.url %></p>
+                            </div>
+                            <form method="POST" action="/admin/liens/<%= lien.id %>/supprimer">
+                                <button type="submit" class="bouton-supprimer">Supprimer</button>
+                            </form>
+                        </div>
+                    <% }) %>
+                <% } %>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/tiroir.js"></script>
+</body>
+</html>

@@ -88,4 +88,50 @@ router.post('/nouvel-article', exigerConnexion, async (req, res) => {
     }
 });
 
+// Page de gestion des liens utiles (protégée)
+router.get('/liens', exigerConnexion, async (req, res) => {
+    try {
+        const [liens] = await db.query(
+            'SELECT id, titre, url FROM liens_utiles ORDER BY ordre ASC, date_creation ASC'
+        );
+        res.render('admin-liens', { liens, erreur: null });
+    } catch (err) {
+        console.error('Erreur chargement liens:', err);
+        res.render('admin-liens', { liens: [], erreur: 'La table liens_utiles n\'existe pas encore. Exécute le schéma SQL sur Neon.' });
+    }
+});
+
+// Ajout d'un lien utile
+router.post('/liens', exigerConnexion, async (req, res) => {
+    try {
+        const { titre, url } = req.body;
+
+        if (!titre || !url || titre.trim().length === 0 || url.trim().length === 0) {
+            const [liens] = await db.query('SELECT id, titre, url FROM liens_utiles ORDER BY ordre ASC, date_creation ASC');
+            return res.render('admin-liens', { liens, erreur: 'Le titre et le lien sont obligatoires.' });
+        }
+
+        await db.query(
+            'INSERT INTO liens_utiles (titre, url) VALUES (?, ?)',
+            [titre.trim().substring(0, 100), url.trim()]
+        );
+
+        res.redirect('/admin/liens');
+    } catch (err) {
+        console.error('Erreur ajout lien:', err);
+        res.redirect('/admin/liens');
+    }
+});
+
+// Suppression d'un lien utile
+router.post('/liens/:id/supprimer', exigerConnexion, async (req, res) => {
+    try {
+        await db.query('DELETE FROM liens_utiles WHERE id = ?', [req.params.id]);
+        res.redirect('/admin/liens');
+    } catch (err) {
+        console.error('Erreur suppression lien:', err);
+        res.redirect('/admin/liens');
+    }
+});
+
 module.exports = router;

@@ -8,7 +8,24 @@
     <link rel="stylesheet" href="/css/admin.css">
 </head>
 <body>
+    <div class="tiroir-fond" id="tiroir-fond"></div>
+    <nav class="tiroir-menu" id="tiroir-menu">
+        <div class="tiroir-entete">
+            <span class="tiroir-logo">Le Fil</span>
+        </div>
+        <a href="/" class="tiroir-lien">Accueil</a>
+        <a href="/admin/liens" class="tiroir-lien">Gérer les liens utiles</a>
+        <a href="/admin/deconnexion" class="tiroir-lien">Se déconnecter</a>
+    </nav>
+
     <div class="conteneur">
+        <div class="bandeau-haut">
+            <button class="bouton-menu" id="bouton-menu" aria-label="Ouvrir le menu">
+                <span></span><span></span><span></span>
+            </button>
+            <a href="/" class="fil-retour" style="margin: 0;">← Retour au site</a>
+        </div>
+
         <header class="entete">
             <a href="/" class="logo-blog">Le Fil</a>
             <div class="entete-ligne">
@@ -46,5 +63,7 @@
             </form>
         </main>
     </div>
+
+    <script src="/js/tiroir.js"></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
+const { recupererLiensUtiles } = require('../db/liens');
 
 // Fonction utilitaire : transforme un titre en slug propre pour l'URL
 function creerSlug(titre) {
@@ -82,8 +83,9 @@ router.get('/', async (req, res) => {
 
         const meteo = await recupererMeteo();
         const chiffreDuJour = chiffreRows.length > 0 ? chiffreRows[0] : null;
+        const liensUtiles = await recupererLiensUtiles();
 
-        res.render('accueil', { articles: articlesAvecVignette, brefs, chiffreDuJour, meteo });
+        res.render('accueil', { articles: articlesAvecVignette, brefs, chiffreDuJour, meteo, liensUtiles });
     } catch (err) {
         console.error('Erreur chargement accueil:', err);
         res.status(500).send('Erreur serveur');
@@ -122,7 +124,9 @@ router.get('/article/:slug', async (req, res) => {
             [article.id]
         );
 
-        res.render('article', { article, parties, images, commentaires });
+        const liensUtiles = await recupererLiensUtiles();
+
+        res.render('article', { article, parties, images, commentaires, liensUtiles });
     } catch (err) {
         console.error('Erreur chargement article:', err);
         res.status(500).send('Erreur serveur');

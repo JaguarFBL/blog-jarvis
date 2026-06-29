@@ -60,3 +60,18 @@ CREATE INDEX IF NOT EXISTS idx_chiffre_date ON chiffre_du_jour (date_publication
 -- ALTER TABLE articles DROP COLUMN IF EXISTS image_photographe;
 -- ALTER TABLE articles DROP COLUMN IF EXISTS image_photographe_url;
 -- ALTER TABLE articles ADD COLUMN IF NOT EXISTS images JSONB;
+
+-- Table pour les liens utiles affichés dans le menu (gérable depuis l'admin)
+CREATE TABLE IF NOT EXISTS liens_utiles (
+    id SERIAL PRIMARY KEY,
+    titre VARCHAR(100) NOT NULL,
+    url TEXT NOT NULL,
+    ordre INTEGER DEFAULT 0,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Liens de départ (à exécuter une seule fois, ou ignorer si tu préfères les ajouter depuis l'admin)
+INSERT INTO liens_utiles (titre, url, ordre) VALUES
+    ('Portfolio', 'https://jaguarfbl.github.io/folio/', 1),
+    ('GitHub', 'https://github.com/JaguarFBL', 2)
+ON CONFLICT DO NOTHING;

@@ -109,6 +109,17 @@ Chaque article (généré par IA ou écrit par toi) peut avoir une photo libre d
 
 Sans cette clé, le blog fonctionne quand même normalement, juste sans photo. Limite gratuite : 50 recherches par heure, largement suffisant pour 1 article par jour.
 
+## Gérer les liens utiles (menu)
+
+Le menu (bouton ☰ en haut à gauche) affiche une section "Liens utiles" — pratique pour accéder à ton portfolio, ton GitHub, ou tout autre site depuis la tablette en mode kiosque.
+
+Pour gérer ces liens, connecte-toi sur `/admin/connexion`, puis va sur :
+```
+https://lefil.onrender.com/admin/liens
+```
+
+Tu peux y ajouter de nouveaux liens (titre + URL) ou supprimer les existants. Si tu as déjà créé la base avant cette mise à jour, exécute la nouvelle table `liens_utiles` du fichier `db/schema.sql` sur Neon — sinon le menu affichera simplement aucune section "Liens utiles" sans planter.
+
 ## Publier tes propres articles
 
 En plus des articles générés automatiquement par l'IA, tu peux écrire et publier les tiens :
