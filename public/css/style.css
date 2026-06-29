@@ -490,8 +490,8 @@ textarea:focus-visible {
     height: 100%;
     width: 78%;
     max-width: 300px;
-    background: var(--papier);
-    border-right: 1px solid var(--encre);
+    background: var(--fond);
+    border-right: 1px solid var(--texte-fonce);
     transform: translateX(-100%);
     transition: transform 0.25s ease;
     z-index: 101;
@@ -505,7 +505,7 @@ textarea:focus-visible {
 
 .tiroir-entete {
     padding: 0 20px 20px;
-    border-bottom: 3px double var(--encre);
+    border-bottom: 3px double var(--texte-fonce);
     margin-bottom: 12px;
 }
 
@@ -513,7 +513,7 @@ textarea:focus-visible {
     font-family: Georgia, serif;
     font-weight: 700;
     font-size: 28px;
-    color: var(--encre);
+    color: var(--texte-fonce);
 }
 
 .tiroir-lien {
@@ -521,38 +521,39 @@ textarea:focus-visible {
     align-items: center;
     gap: 12px;
     padding: 14px 20px;
-    color: var(--encre);
+    color: var(--texte-fonce);
     text-decoration: none;
     font-size: 15px;
     border-bottom: 1px solid var(--bordure);
 }
 
 .tiroir-lien:active {
-    background: var(--papier-carte);
+    background: var(--fond-carte);
 }
 
-.tiroir-poignee {
-    position: fixed;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-    width: 18px;
-    height: 56px;
-    background: var(--encre);
-    border-radius: 0 8px 8px 0;
-    opacity: 0.55;
-    z-index: 99;
+.bouton-menu {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
+    gap: 4px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
 }
 
-.tiroir-poignee::before {
-    content: '';
-    width: 3px;
-    height: 24px;
-    background: var(--papier);
-    border-radius: 2px;
+.bouton-menu span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--texte-fonce);
+}
+
+.bouton-menu:active {
+    opacity: 0.6;
 }
 
 /* ===== BREFS EN SCROLL HORIZONTAL (tactile) ===== */
@@ -565,13 +566,13 @@ textarea:focus-visible {
 }
 
 .bref-pastille {
-    background: var(--papier-carte);
+    background: var(--fond-carte);
     border: 1px solid var(--bordure);
     padding: 10px 14px;
     font-size: 12px;
     white-space: nowrap;
     flex-shrink: 0;
-    color: var(--encre-douce);
+    color: var(--texte-corps);
 }
 
 /* ===== ARTICLE VEDETTE vs COMPACT (liste accueil tablette) ===== */

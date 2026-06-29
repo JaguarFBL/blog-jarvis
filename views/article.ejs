@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <div class="tiroir-poignee" aria-hidden="true"></div>
     <div class="tiroir-fond" id="tiroir-fond"></div>
     <nav class="tiroir-menu" id="tiroir-menu">
         <div class="tiroir-entete">
@@ -19,7 +18,12 @@
     </nav>
 
     <div class="conteneur">
-        <a href="/" class="fil-retour">← Retour aux articles</a>
+        <div class="bandeau-haut">
+            <button class="bouton-menu" id="bouton-menu" aria-label="Ouvrir le menu">
+                <span></span><span></span><span></span>
+            </button>
+            <a href="/" class="fil-retour" style="margin: 0;">← Retour aux articles</a>
+        </div>
 
         <article>
             <% if (images.length > 0) { %>

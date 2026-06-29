@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <div class="tiroir-poignee" aria-hidden="true"></div>
     <div class="tiroir-fond" id="tiroir-fond"></div>
     <nav class="tiroir-menu" id="tiroir-menu">
         <div class="tiroir-entete">
@@ -20,6 +19,9 @@
 
     <div class="conteneur">
         <div class="bandeau-haut">
+            <button class="bouton-menu" id="bouton-menu" aria-label="Ouvrir le menu">
+                <span></span><span></span><span></span>
+            </button>
             <span><%= new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) %></span>
             <% if (meteo) { %>
                 <div class="bandeau-meteo">

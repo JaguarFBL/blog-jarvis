@@ -1,5 +1,7 @@
-// Menu tiroir déclenché par un swipe depuis le bord gauche de l'écran
-// Pensé pour un usage tactile sur tablette (kiosque)
+// Menu tiroir : s'ouvre via le bouton hamburger (méthode fiable, fonctionne
+// même dans les navigateurs kiosque comme Fully Kiosk qui peuvent intercepter
+// les gestes de swipe). Le swipe reste actif en complément, pour les navigateurs
+// classiques.
 
 document.addEventListener('DOMContentLoaded', () => {
     const tiroir = document.getElementById('tiroir-menu');
