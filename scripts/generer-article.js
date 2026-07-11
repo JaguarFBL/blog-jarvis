@@ -2,7 +2,7 @@
 // brefs (mini-actus), et chiffre du jour. Appelé chaque jour via cron-job.org
 
 const db = require('../db/connection');
-const { creerSlug } = require('../routes/blog');
+const { creerSlug } = require('../db/utils');
 
 // Nettoie le Markdown que l'IA pourrait avoir ajouté malgré la consigne
 function nettoyerMarkdown(texte) {

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const { exigerConnexion } = require('../middleware/auth');
-const { creerSlug } = require('./blog');
+const { creerSlug } = require('../db/utils');
 const { chercherImage } = require('../scripts/generer-article');
 
 // Page de connexion

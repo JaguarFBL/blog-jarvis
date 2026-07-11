@@ -3,17 +3,7 @@ const router = express.Router();
 const db = require('../db/connection');
 const { recupererLiensUtiles } = require('../db/liens');
 const { genererArticlesDuJour, genererBrefsDuJour, genererChiffreDuJour } = require('../scripts/generer-article');
-
-// Fonction utilitaire : transforme un titre en slug propre pour l'URL
-function creerSlug(titre) {
-    return titre
-        .toLowerCase()
-        .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // enlève les accents
-        .replace(/[^a-z0-9\s-]/g, '')
-        .trim()
-        .replace(/\s+/g, '-')
-        .substring(0, 100);
-}
+const { creerSlug } = require('../db/utils');
 
 // Correspondance simplifiée code météo Open-Meteo -> texte lisible
 // (référence WMO simplifiée, gratuite, sans clé API)
@@ -70,12 +60,11 @@ router.get('/', async (req, res) => {
             imageVignette: a.images && a.images.length > 0 ? a.images[0].url : null
         }));
 
-        // Si pas d'article publié aujourd'hui, déclencher la génération en arrière-plan
-        // (le visiteur voit la page tout de suite, les articles arrivent en quelques secondes)
         let generationEnCours = false;
-        const aujourdhui = new Date().toISOString().slice(0, 10);
+        const debutAujourdhui = new Date();
+        debutAujourdhui.setHours(0, 0, 0, 0);
         const articleAujourdhui = articles.find(a =>
-            a.date_publication && a.date_publication.slice(0, 10) === aujourdhui
+            a.date_publication && new Date(a.date_publication) >= debutAujourdhui
         );
         if (!articleAujourdhui && process.env.AI_API_KEY) {
             generationEnCours = true;
@@ -179,4 +168,3 @@ router.post('/article/:slug/commentaire', async (req, res) => {
 });
 
 module.exports = router;
-module.exports.creerSlug = creerSlug;
