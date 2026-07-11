@@ -44,6 +44,12 @@ router.get('/articles/:slug', async (req, res) => {
     }
 });
 
+// Ping keep-alive : réponse ultra-rapide pour les services de monitoring
+// (cron-job.org, UptimeRobot, etc.) qui empêche Render de mettre le site en veille
+router.get('/ping', (req, res) => {
+    res.json({ ok: true, time: new Date().toISOString() });
+});
+
 // Route appelée chaque jour par cron-job.org
 // Protégée par une clé secrète passée en paramètre : /api/generate-article?cle=TA_CLE_SECRETE
 router.get('/generate-article', async (req, res) => {

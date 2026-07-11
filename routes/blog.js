@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const { recupererLiensUtiles } = require('../db/liens');
+const { genererArticlesDuJour, genererBrefsDuJour, genererChiffreDuJour } = require('../scripts/generer-article');
 
 // Fonction utilitaire : transforme un titre en slug propre pour l'URL
 function creerSlug(titre) {
@@ -64,11 +65,25 @@ router.get('/', async (req, res) => {
             articles = result;
         }
 
-        // La première image de chaque article sert de vignette
         const articlesAvecVignette = articles.map(a => ({
             ...a,
             imageVignette: a.images && a.images.length > 0 ? a.images[0].url : null
         }));
+
+        // Si pas d'article publié aujourd'hui, déclencher la génération en arrière-plan
+        // (le visiteur voit la page tout de suite, les articles arrivent en quelques secondes)
+        let generationEnCours = false;
+        const aujourdhui = new Date().toISOString().slice(0, 10);
+        const articleAujourdhui = articles.find(a =>
+            a.date_publication && a.date_publication.slice(0, 10) === aujourdhui
+        );
+        if (!articleAujourdhui && process.env.AI_API_KEY) {
+            generationEnCours = true;
+            genererArticlesDuJour()
+                .then(() => genererBrefsDuJour().catch(() => {}))
+                .then(() => genererChiffreDuJour().catch(() => {}))
+                .catch(e => console.error('Auto-génération:', e.message));
+        }
 
         let brefs = [], chiffreRows = [];
         try {
@@ -85,7 +100,7 @@ router.get('/', async (req, res) => {
         const chiffreDuJour = chiffreRows.length > 0 ? chiffreRows[0] : null;
         const liensUtiles = await recupererLiensUtiles();
 
-        res.render('accueil', { articles: articlesAvecVignette, brefs, chiffreDuJour, meteo, liensUtiles });
+        res.render('accueil', { articles: articlesAvecVignette, brefs, chiffreDuJour, meteo, liensUtiles, generationEnCours });
     } catch (err) {
         console.error('Erreur chargement accueil:', err);
         res.status(500).send('Erreur serveur');

@@ -51,6 +51,10 @@
             </div>
         </header>
 
+        <% if (generationEnCours) { %>
+            <p class="notice-generation">Article du jour en cours de génération...</p>
+        <% } %>
+
         <% if (chiffreDuJour) { %>
             <div class="encart-chiffre">
                 <p class="eyebrow">Le chiffre du jour</p>
