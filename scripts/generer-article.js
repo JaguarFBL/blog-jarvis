@@ -196,9 +196,19 @@ PARTIE3: [la conclusion ou ouverture]`;
 async function genererArticlesDuJour() {
     const resultats = [];
     const erreurs = [];
+    const debutAujourdhui = new Date();
+    debutAujourdhui.setHours(0, 0, 0, 0);
 
     for (const categorie of CATEGORIES) {
         try {
+            const [existants] = await db.query(
+                'SELECT id FROM articles WHERE categorie = ? AND date_publication >= ? LIMIT 1',
+                [categorie.nom, debutAujourdhui]
+            );
+            if (existants.length > 0) {
+                resultats.push({ skip: true, categorie: categorie.nom });
+                continue;
+            }
             const resultat = await genererArticlePourCategorie(categorie);
             resultats.push(resultat);
         } catch (err) {
@@ -214,6 +224,11 @@ async function genererArticlesDuJour() {
 // GÉNÉRATION DES BREFS (mini-actus du jour)
 // ============================================
 async function genererBrefsDuJour() {
+    const debutAujourdhui = new Date();
+    debutAujourdhui.setHours(0, 0, 0, 0);
+    const [existants] = await db.query('SELECT id FROM brefs WHERE date_publication >= ? LIMIT 1', [debutAujourdhui]);
+    if (existants.length > 0) return [];
+
     const prompt = `Rédige 4 mini-actualités très courtes (1 phrase chacune, maximum 25 mots) résumant des informations factuelles et variées du jour (France et international). Pas de Markdown, pas de numérotation visible.
 
 Format de réponse EXACT, une mini-actu par ligne :
@@ -237,6 +252,11 @@ BREF: [quatrième mini-actu]`;
 // GÉNÉRATION DU CHIFFRE DU JOUR
 // ============================================
 async function genererChiffreDuJour() {
+    const debutAujourdhui = new Date();
+    debutAujourdhui.setHours(0, 0, 0, 0);
+    const [existants] = await db.query('SELECT id FROM chiffre_du_jour WHERE date_publication >= ? LIMIT 1', [debutAujourdhui]);
+    if (existants.length > 0) return null;
+
     const prompt = `Donne un chiffre marquant et factuel lié à l'actualité récente ou à une statistique notable (France ou monde). Le chiffre doit être court (ex: "2,3M", "47%", "12 milliards €"). La légende explique le chiffre en une phorte courte phrase (max 20 mots). Pas de Markdown.
 
 Format de réponse EXACT :
